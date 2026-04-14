@@ -222,7 +222,7 @@ For the full plugin directory with commands and install examples — see `refere
 | File | Contents |
 |---|---|
 | `references/commands.md` | Complete reference for all 170+ core commands, organized by namespace |
-| `references/plugins.md` | All known plugins (official + community) with commands and install instructions |
+| `references/plugins.md` | All known plugins — Pantheon-maintained, community, archived — with Terminus compatibility, commands, and install instructions |
 | `references/env-vars.md` | Environment variables and `~/.terminus/config.yml` configuration |
 | `references/scripting.md` | Bash scripting patterns and CI/CD integration (GitHub Actions, CircleCI, GitLab, Bitbucket) |
 | `references/safety.md` | Destructive command checklist and confirmation requirements |
