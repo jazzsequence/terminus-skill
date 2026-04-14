@@ -23,34 +23,11 @@ Terminus 3.x is also supported with minor differences.
 
 ## Installation
 
-### Via Claude Code marketplace (recommended — auto-updates)
-
-Add this repo as a marketplace in your Claude Code `settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "terminus-skill": {
-      "source": {
-        "source": "github",
-        "repo": "jazzsequence/terminus-skill"
-      }
-    }
-  }
-}
-```
-
-Then install the skill:
-
-```
-/plugin install terminus-skill@terminus-skill
-```
-
-### Via installer script
-
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
 ```
+
+The installer copies the skill to `~/.claude/skills/terminus/` and automatically adds this repo as a marketplace to `~/.claude/settings.json`, enabling auto-updates.
 
 Or from a local clone:
 
@@ -61,6 +38,14 @@ cd terminus-skill
 ```
 
 The skill will be available as `terminus` in Claude Code.
+
+### Options
+
+```bash
+./install.sh --symlink         # symlink instead of copy (updates with git pull)
+./install.sh --no-marketplace  # skip settings.json marketplace configuration
+./install.sh --uninstall       # remove the skill
+```
 
 ## Updating
 
