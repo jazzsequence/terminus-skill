@@ -23,17 +23,52 @@ Terminus 3.x is also supported with minor differences.
 
 ## Installation
 
-Copy the skill directory into your Claude Code skills folder:
+### One-liner (once repo is published)
 
 ```bash
-# User-level install (available in all projects)
-cp -r terminus-skill ~/.claude/skills/terminus
+bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
+```
 
-# Or symlink it (easier to update)
-ln -s /path/to/terminus-skill ~/.claude/skills/terminus
+### From a local clone
+
+```bash
+git clone https://github.com/jazzsequence/terminus-skill
+cd terminus-skill
+./install.sh
+```
+
+### Symlink mode (recommended for contributors)
+
+Installs a symlink so `git pull` in your clone automatically updates the skill:
+
+```bash
+./install.sh --symlink
 ```
 
 The skill will be available as `terminus` in Claude Code.
+
+## Updating
+
+**If installed via the installer (default):** Re-run the installer — it detects an existing git-managed install and runs `git pull`:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
+# or, from your local clone:
+./install.sh
+```
+
+**If installed with `--symlink`:** Update your local clone:
+
+```bash
+cd /path/to/terminus-skill
+git pull
+```
+
+## Uninstalling
+
+```bash
+./install.sh --uninstall
+```
 
 ## Usage
 
@@ -78,17 +113,6 @@ references/
 - `terminus-filer-plugin` — Open SFTP connections in desktop clients
 - `terminus-pancakes-plugin` — Open databases in SQL clients
 - `terminus-site-status-plugin` — Multi-environment status overview
-
-## Updating
-
-Pull the latest version and reinstall:
-
-```bash
-cd /path/to/terminus-skill
-git pull
-```
-
-If symlinked, the update is automatic.
 
 ## Contributing
 
