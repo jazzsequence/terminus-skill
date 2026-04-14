@@ -49,7 +49,16 @@ The skill will be available as `terminus` in Claude Code.
 
 ## Updating
 
-Claude Code handles updates automatically via the marketplace. To update manually:
+Once installed, enable automatic updates in Claude Code:
+
+```
+/plugin
+→ → Marketplace
+↓ terminus-skill
+[RETURN] → → Enable auto-update
+```
+
+To update manually:
 
 ```
 /plugin marketplace update terminus-skill
