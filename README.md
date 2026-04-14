@@ -23,7 +23,7 @@ Terminus 3.x is also supported with minor differences.
 
 ## Installation
 
-### One-liner (once repo is published)
+### One-liner
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
