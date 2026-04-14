@@ -6,8 +6,9 @@
 #   ./install.sh --symlink    Symlink instead of copy (auto-updates with git pull)
 #   ./install.sh --uninstall  Remove the installed skill
 #   ./install.sh --force      Skip confirmation prompts
+#   ./install.sh --no-marketplace  Skip settings.json marketplace configuration
 #
-# One-liner (once repo is published):
+# One-liner:
 #   bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
 
 set -euo pipefail
@@ -15,6 +16,8 @@ set -euo pipefail
 SKILL_NAME="terminus"
 SKILLS_DIR="${HOME}/.claude/skills"
 INSTALL_DIR="${SKILLS_DIR}/${SKILL_NAME}"
+SETTINGS_FILE="${HOME}/.claude/settings.json"
+MARKETPLACE_KEY="terminus-skill"
 REPO_URL="https://github.com/jazzsequence/terminus-skill"
 
 # Colors (only when stdout is a terminal)
@@ -37,18 +40,21 @@ die()    { echo -e "${RED}✗${RESET} ${1}" >&2; exit 1; }
 SYMLINK=false
 UNINSTALL=false
 FORCE=false
+NO_MARKETPLACE=false
 
 for arg in "$@"; do
   case "$arg" in
-    --symlink)   SYMLINK=true ;;
-    --uninstall) UNINSTALL=true ;;
-    --force|-f)  FORCE=true ;;
+    --symlink)         SYMLINK=true ;;
+    --uninstall)       UNINSTALL=true ;;
+    --force|-f)        FORCE=true ;;
+    --no-marketplace)  NO_MARKETPLACE=true ;;
     --help|-h)
-      echo "Usage: $0 [--symlink] [--uninstall] [--force]"
+      echo "Usage: $0 [--symlink] [--uninstall] [--force] [--no-marketplace]"
       echo ""
-      echo "  --symlink    Symlink the skill directory instead of copying (useful for local dev)"
-      echo "  --uninstall  Remove the installed skill"
-      echo "  --force      Skip confirmation prompts"
+      echo "  --symlink         Symlink the skill directory instead of copying (useful for local dev)"
+      echo "  --uninstall       Remove the installed skill"
+      echo "  --force           Skip confirmation prompts"
+      echo "  --no-marketplace  Skip automatic settings.json marketplace configuration"
       exit 0
       ;;
     *) die "Unknown option: $arg. Run '$0 --help' for usage." ;;
@@ -60,6 +66,63 @@ done
 # When run locally, it's the directory containing this script.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SOURCE_DIR="${__SOURCE_DIR:-$SCRIPT_DIR}"
+
+# ── Marketplace configuration ─────────────────────────────────────────────────
+# Adds this repo as a marketplace in ~/.claude/settings.json so Claude Code
+# can auto-update the skill via /plugin marketplace update.
+
+configure_marketplace() {
+  if [[ "$NO_MARKETPLACE" == true ]]; then
+    return
+  fi
+
+  local marketplace_entry
+  marketplace_entry=$(cat <<'JSON'
+{"source": {"source": "github", "repo": "jazzsequence/terminus-skill"}}
+JSON
+)
+
+  if ! command -v jq &>/dev/null; then
+    warn "jq not found — skipping automatic marketplace configuration."
+    warn "To enable auto-updates, add this to ${SETTINGS_FILE}:"
+    echo ""
+    echo '  "extraKnownMarketplaces": {'
+    echo '    "terminus-skill": {'
+    echo '      "source": {'
+    echo '        "source": "github",'
+    echo '        "repo": "jazzsequence/terminus-skill"'
+    echo '      }'
+    echo '    }'
+    echo '  }'
+    echo ""
+    return
+  fi
+
+  if [[ -f "$SETTINGS_FILE" ]]; then
+    local existing
+    existing=$(jq -r --arg key "$MARKETPLACE_KEY" '.extraKnownMarketplaces[$key] // empty' "$SETTINGS_FILE" 2>/dev/null || true)
+    if [[ -n "$existing" ]]; then
+      ok "Marketplace already configured in ${SETTINGS_FILE}"
+      return
+    fi
+    local tmp
+    tmp=$(mktemp)
+    jq --arg key "$MARKETPLACE_KEY" \
+       --argjson entry "$marketplace_entry" \
+       '.extraKnownMarketplaces[$key] = $entry' \
+       "$SETTINGS_FILE" > "$tmp" && mv "$tmp" "$SETTINGS_FILE"
+  else
+    mkdir -p "$(dirname "$SETTINGS_FILE")"
+    jq -n \
+       --arg key "$MARKETPLACE_KEY" \
+       --argjson entry "$marketplace_entry" \
+       '{extraKnownMarketplaces: {($key): $entry}}' \
+       > "$SETTINGS_FILE"
+  fi
+
+  ok "Marketplace configured in ${SETTINGS_FILE}"
+  ok "Auto-updates enabled — use /plugin marketplace update to pull latest"
+}
 
 # ── Uninstall ────────────────────────────────────────────────────────────────
 
@@ -82,7 +145,6 @@ fi
 # with no skill files — detect this and clone instead.
 
 is_remote_install() {
-  # If SKILL.md doesn't exist next to the script, we're running remotely
   [[ ! -f "${SOURCE_DIR}/SKILL.md" ]]
 }
 
@@ -111,6 +173,7 @@ if [[ -d "${INSTALL_DIR}/.git" ]] && [[ "$SYMLINK" != true ]]; then
   log "Existing git-managed install found — updating…"
   git -C "$INSTALL_DIR" pull --rebase --autostash 2>&1 | sed 's/^/  /'
   ok "Terminus skill updated at ${INSTALL_DIR}"
+  configure_marketplace
   echo ""
   echo "  Skill location: ${INSTALL_DIR}"
   echo "  Invoke in Claude Code with: /terminus"
@@ -141,13 +204,9 @@ else
       log "Installing as git clone for easy future updates…"
       git clone --depth=1 "$REMOTE_URL" "$INSTALL_DIR" 2>&1 | sed 's/^/  /'
       ok "Installed at ${INSTALL_DIR} (git-managed)"
-      echo ""
-      warn "To update later, re-run this installer or: git -C ${INSTALL_DIR} pull"
     else
-      # Local repo with no remote — just copy
       cp -r "$SOURCE_DIR" "$INSTALL_DIR"
       ok "Copied to ${INSTALL_DIR}"
-      echo ""
       warn "No git remote configured — updates require manually re-running the installer."
     fi
   else
@@ -155,6 +214,8 @@ else
     ok "Copied to ${INSTALL_DIR}"
   fi
 fi
+
+configure_marketplace
 
 echo ""
 log "Terminus skill installed successfully."

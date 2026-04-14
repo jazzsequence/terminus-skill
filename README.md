@@ -116,23 +116,42 @@ references/
 ## Covered plugins
 
 ### Official (Pantheon Systems)
-- `terminus-autopilot-plugin` — Autopilot management
-- `terminus-build-tools-plugin` — GitHub + CI/CD workflows
-- `terminus-carbon-plugin` — Carbon impact metrics
-- `terminus-composer-plugin` — Remote Composer operations
-- `terminus-conversion-tools-plugin` — Drupal Composer conversion and upgrades
-- `terminus-decoupled-kit-plugin` — Decoupled/headless site creation
-- `terminus-mass-update` — Bulk upstream updates
-- `terminus-quicksilver-plugin` — Quicksilver webhook deployment
-- `terminus-rsync-plugin` — File transfer to/from Pantheon
-- `terminus-scheduled-jobs-plugin` — Cron job scheduling
-- `terminus-secrets-plugin` — Legacy secrets.json management
-- `terminus-site-clone-plugin` — Full site duplication
+
+Plugins in the `pantheon-systems` org with a CODEOWNERS file and/or a Pantheon OSS support badge.
+
+| Plugin | Description | Status |
+|---|---|---|
+| `terminus-autopilot-plugin` | Autopilot management | Active |
+| `terminus-build-tools-plugin` | GitHub + CI/CD workflows | Actively Maintained |
+| `terminus-composer-plugin` | Remote Composer operations | Actively Maintained |
+| `terminus-conversion-tools-plugin` | Drupal Composer conversion and upgrades | Early Access |
+| `terminus-decoupled-kit-plugin` | Decoupled/headless site creation | Active |
+| `terminus-mass-update` | Bulk upstream updates | Actively Maintained |
+| `terminus-quicksilver-plugin` | Quicksilver webhook deployment | Actively Maintained |
+| `terminus-rsync-plugin` | File transfer to/from Pantheon | Actively Maintained |
+| `terminus-scheduled-jobs-plugin` | Cron job scheduling (private beta) | Active |
+| `terminus-site-clone-plugin` | Full site duplication | Actively Maintained |
+
+> **Archived — do not install:** `terminus-secrets-plugin` is archived. Use the built-in `secret:site:*` commands in Terminus 4.x instead.
 
 ### Community (terminus-plugin-project)
-- `terminus-filer-plugin` — Open SFTP connections in desktop clients
-- `terminus-pancakes-plugin` — Open databases in SQL clients
-- `terminus-site-status-plugin` — Multi-environment status overview
+
+Community-maintained plugins. May not support Terminus 4.x — verify before installing.
+
+| Plugin | Description |
+|---|---|
+| `terminus-autocomplete-plugin` | Tab completion for Terminus commands |
+| `terminus-backup-all-plugin` | Back up all sites at once |
+| `terminus-code-plugin` | Clone site code to local |
+| `terminus-domain-challenge` | Automate DNS challenge validation |
+| `terminus-filer-plugin` | Open SFTP in desktop clients |
+| `terminus-pancakes-plugin` | Open databases in SQL clients |
+| `terminus-replica-plugin` | Expose database replica connection details |
+| `terminus-site-mount-plugin` | Mount Pantheon sites locally |
+| `terminus-site-status-plugin` | Multi-environment status overview |
+| `terminus-upstream-deployment-plugin` | Automated upstream updates with backup |
+
+See the [terminus-plugin-project org](https://github.com/terminus-plugin-project) for the full list.
 
 ## Contributing
 
