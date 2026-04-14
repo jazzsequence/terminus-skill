@@ -49,27 +49,13 @@ The skill will be available as `terminus` in Claude Code.
 
 ## Updating
 
-**If installed via the marketplace:** Claude Code handles updates automatically. To update manually:
+Claude Code handles updates automatically via the marketplace. To update manually:
 
 ```
 /plugin marketplace update terminus-skill
 ```
 
-**If installed via the installer script:** Re-run the installer — it detects an existing install and pulls the latest:
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
-```
-
 ## Uninstalling
-
-**Marketplace install:**
-
-```
-/plugin uninstall terminus-skill
-```
-
-**Installer-based install:**
 
 ```bash
 ./install.sh --uninstall
