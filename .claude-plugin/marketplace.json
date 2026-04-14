@@ -1,0 +1,23 @@
+{
+  "name": "terminus-skill",
+  "owner": {
+    "name": "Chris Reynolds"
+  },
+  "plugins": [
+    {
+      "name": "terminus-skill",
+      "source": {
+        "source": "github",
+        "repo": "jazzsequence/terminus-skill"
+      },
+      "description": "Claude Code skill for Terminus, Pantheon's official CLI. Provides command reference, plugin management, scripting patterns, and CI/CD workflows.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Chris Reynolds"
+      },
+      "homepage": "https://github.com/jazzsequence/terminus-skill",
+      "repository": "https://github.com/jazzsequence/terminus-skill",
+      "keywords": ["terminus", "pantheon", "cli", "devops", "wordpress"]
+    }
+  ]
+}

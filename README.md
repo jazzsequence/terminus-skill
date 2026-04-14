@@ -23,13 +23,36 @@ Terminus 3.x is also supported with minor differences.
 
 ## Installation
 
-### One-liner
+### Via Claude Code marketplace (recommended — auto-updates)
+
+Add this repo as a marketplace in your Claude Code `settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "terminus-skill": {
+      "source": {
+        "source": "github",
+        "repo": "jazzsequence/terminus-skill"
+      }
+    }
+  }
+}
+```
+
+Then install the skill:
+
+```
+/plugin install terminus-skill@terminus-skill
+```
+
+### Via installer script
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
 ```
 
-### From a local clone
+Or from a local clone:
 
 ```bash
 git clone https://github.com/jazzsequence/terminus-skill
@@ -37,34 +60,31 @@ cd terminus-skill
 ./install.sh
 ```
 
-### Symlink mode (recommended for contributors)
-
-Installs a symlink so `git pull` in your clone automatically updates the skill:
-
-```bash
-./install.sh --symlink
-```
-
 The skill will be available as `terminus` in Claude Code.
 
 ## Updating
 
-**If installed via the installer (default):** Re-run the installer — it detects an existing git-managed install and runs `git pull`:
+**If installed via the marketplace:** Claude Code handles updates automatically. To update manually:
+
+```
+/plugin marketplace update terminus-skill
+```
+
+**If installed via the installer script:** Re-run the installer — it detects an existing install and pulls the latest:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
-# or, from your local clone:
-./install.sh
-```
-
-**If installed with `--symlink`:** Update your local clone:
-
-```bash
-cd /path/to/terminus-skill
-git pull
 ```
 
 ## Uninstalling
+
+**Marketplace install:**
+
+```
+/plugin uninstall terminus-skill
+```
+
+**Installer-based install:**
 
 ```bash
 ./install.sh --uninstall
