@@ -4,7 +4,7 @@ Complete reference for all Terminus 4.x core commands. Commands are organized by
 
 **Command format:** `terminus <namespace>:<action> [<site>.<env>] [options]`
 
-Use `terminus <command> --help` for full options on any command. Use `terminus list` to see all commands including those added by plugins.
+Use `terminus help <command>` for full options on any command. Use `terminus list` to see all commands including those added by plugins.
 
 ---
 

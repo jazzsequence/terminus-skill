@@ -7,7 +7,7 @@ A Claude Code skill for working with [Terminus](https://github.com/pantheon-syst
 When active, Claude Code can:
 
 - Infer the correct Terminus command from a natural-language request
-- Discover valid commands via `terminus list` and `--help` rather than guessing
+- Discover valid commands via `terminus list` and `terminus help <command>` rather than guessing
 - Know about all official Pantheon plugins and community plugins, with exact command names
 - Guide scripting and CI/CD integration patterns
 - Refuse to suggest commands, flags, or subcommands that don't exist
