@@ -117,20 +117,21 @@ references/
 
 ### Official (Pantheon Systems)
 
-Plugins in the `pantheon-systems` org with a CODEOWNERS file and/or a Pantheon OSS support badge.
+Plugins in the `pantheon-systems` org with a CODEOWNERS file and/or listed in the [Pantheon plugin directory](https://docs.pantheon.io/terminus/directory). Check each repo's README for its current maintenance status badge.
 
-| Plugin | Description | Status |
-|---|---|---|
-| `terminus-autopilot-plugin` | Autopilot management | Active |
-| `terminus-build-tools-plugin` | GitHub + CI/CD workflows | Actively Maintained |
-| `terminus-composer-plugin` | Remote Composer operations | Actively Maintained |
-| `terminus-conversion-tools-plugin` | Drupal Composer conversion and upgrades | Early Access |
-| `terminus-decoupled-kit-plugin` | Decoupled/headless site creation | Active |
-| `terminus-mass-update` | Bulk upstream updates | Actively Maintained |
-| `terminus-quicksilver-plugin` | Quicksilver webhook deployment | Actively Maintained |
-| `terminus-rsync-plugin` | File transfer to/from Pantheon | Actively Maintained |
-| `terminus-scheduled-jobs-plugin` | Cron job scheduling (private beta) | Active |
-| `terminus-site-clone-plugin` | Full site duplication | Actively Maintained |
+| Plugin | Description |
+|---|---|
+| [`terminus-autopilot-plugin`](https://github.com/pantheon-systems/terminus-autopilot-plugin) | Autopilot management |
+| [`terminus-build-tools-plugin`](https://github.com/pantheon-systems/terminus-build-tools-plugin) | GitHub + CI/CD workflows |
+| [`terminus-carbon-plugin`](https://github.com/pantheon-systems/terminus-carbon-plugin) | Carbon impact metrics |
+| [`terminus-composer-plugin`](https://github.com/pantheon-systems/terminus-composer-plugin) | Remote Composer operations |
+| [`terminus-conversion-tools-plugin`](https://github.com/pantheon-systems/terminus-conversion-tools-plugin) | Drupal Composer conversion and upgrades |
+| [`terminus-decoupled-kit-plugin`](https://github.com/pantheon-systems/terminus-decoupled-kit-plugin) | Decoupled/headless site creation |
+| [`terminus-mass-update`](https://github.com/pantheon-systems/terminus-mass-update) | Bulk upstream updates |
+| [`terminus-quicksilver-plugin`](https://github.com/pantheon-systems/terminus-quicksilver-plugin) | Quicksilver webhook deployment |
+| [`terminus-rsync-plugin`](https://github.com/pantheon-systems/terminus-rsync-plugin) | File transfer to/from Pantheon |
+| [`terminus-scheduled-jobs-plugin`](https://github.com/pantheon-systems/terminus-scheduled-jobs-plugin) | Cron job scheduling (private beta) |
+| [`terminus-site-clone-plugin`](https://github.com/pantheon-systems/terminus-site-clone-plugin) | Full site duplication |
 
 > **Archived — do not install:** `terminus-secrets-plugin` is archived. Use the built-in `secret:site:*` commands in Terminus 4.x instead.
 
@@ -140,16 +141,16 @@ Community-maintained plugins. May not support Terminus 4.x — verify before ins
 
 | Plugin | Description |
 |---|---|
-| `terminus-autocomplete-plugin` | Tab completion for Terminus commands |
-| `terminus-backup-all-plugin` | Back up all sites at once |
-| `terminus-code-plugin` | Clone site code to local |
-| `terminus-domain-challenge` | Automate DNS challenge validation |
-| `terminus-filer-plugin` | Open SFTP in desktop clients |
-| `terminus-pancakes-plugin` | Open databases in SQL clients |
-| `terminus-replica-plugin` | Expose database replica connection details |
-| `terminus-site-mount-plugin` | Mount Pantheon sites locally |
-| `terminus-site-status-plugin` | Multi-environment status overview |
-| `terminus-upstream-deployment-plugin` | Automated upstream updates with backup |
+| [`terminus-autocomplete-plugin`](https://github.com/terminus-plugin-project/terminus-autocomplete-plugin) | Tab completion for Terminus commands |
+| [`terminus-backup-all-plugin`](https://github.com/terminus-plugin-project/terminus-backup-all-plugin) | Back up all sites at once |
+| [`terminus-code-plugin`](https://github.com/terminus-plugin-project/terminus-code-plugin) | Clone site code to local |
+| [`terminus-domain-challenge`](https://github.com/terminus-plugin-project/terminus-domain-challenge) | Automate DNS challenge validation |
+| [`terminus-filer-plugin`](https://github.com/terminus-plugin-project/terminus-filer-plugin) | Open SFTP in desktop clients |
+| [`terminus-pancakes-plugin`](https://github.com/terminus-plugin-project/terminus-pancakes-plugin) | Open databases in SQL clients |
+| [`terminus-replica-plugin`](https://github.com/terminus-plugin-project/terminus-replica-plugin) | Expose database replica connection details |
+| [`terminus-site-mount-plugin`](https://github.com/terminus-plugin-project/terminus-site-mount-plugin) | Mount Pantheon sites locally |
+| [`terminus-site-status-plugin`](https://github.com/terminus-plugin-project/terminus-site-status-plugin) | Multi-environment status overview |
+| [`terminus-upstream-deployment-plugin`](https://github.com/terminus-plugin-project/terminus-upstream-deployment-plugin) | Automated upstream updates with backup |
 
 See the [terminus-plugin-project org](https://github.com/terminus-plugin-project) for the full list.
 
