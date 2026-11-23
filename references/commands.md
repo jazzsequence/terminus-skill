@@ -293,7 +293,7 @@ The `--` separator is required. SSH key must be configured on the account.
 
 | Command | Description |
 |---|---|
-| `site:create <name> <label> <upstream-id>` | Create a new site. Slow: WordPress sites have taken 2m40s–4m+, so allow a timeout over 5 minutes. **WordPress only:** the new dev environment has code but no install — run `remote:wp <site>.dev -- core install ...` before anything else works. `--org=<org>`, `--region=us\|eu\|au\|ca`, `--vcs-provider=<provider>`, `--vcs-org=<org>`, `--visibility=public\|private`, `--create-repo`, `--repository-name=<name>`, `--skip-clone-repo` |
+| `site:create <name> <label> <upstream-id>` | Create a new site. `--org=<org>`, `--region=us\|eu\|au\|ca`, `--vcs-provider=<provider>`, `--vcs-org=<org>`, `--visibility=public\|private`, `--create-repo`, `--repository-name=<name>`, `--skip-clone-repo` |
 | `site:delete <site>` | **DESTRUCTIVE** — Permanently delete a site from Pantheon |
 | `site:info <site>` | Display site information. Fields: `id`, `name`, `label`, `created`, `framework`, `region`, `organization`, `plan_name`, `max_num_cdes`, `upstream`, `upstream_label`, `holder_type`, `holder_id`, `owner`, `frozen`, `last_frozen_at`, `has_object_cache`, `search`. PHP version is per environment, not a site field — use `env:list <site> --fields=id,php_version` |
 | `site:label:set <site> <label>` | Change the site label |

@@ -102,6 +102,16 @@ terminus remote:drush <site>.<env> -- <drush-args>
 
 The `--` separator is required — without it, flags are parsed by Terminus instead of WP-CLI/Drush. See `references/commands.md` under `remote` for full options.
 
+### Creating a site
+
+`terminus site:create` is slow. WordPress sites have taken 2m40s–4m+, so allow a timeout over 5 minutes. A new site isn't usable right away, and what's left to do depends on the framework:
+
+| Site type | After `site:create` |
+|---|---|
+| WordPress | Dev has code but no install. Run `terminus remote:wp <site>.dev -- core install ...` before anything else works. |
+| Drupal | Dev has code but no install. Run `terminus remote:drush <site>.dev -- site-install -y`; `remote:drush <site>.dev -- user-login` gives a one-time login link. |
+| Next.js | No install step. The code lives in an external repo (`--vcs-provider=github`), and the creation workflow triggers the first build. `terminus node:builds:wait <site>.dev` can fail with "This command only works for sites using external VCS" until that workflow finishes. That's expected, so keep polling rather than recreating the site. |
+
 ## Plugins
 
 Plugin commands are only available after installation. Always verify a plugin is installed with `terminus self:plugin:list` before suggesting its commands.
