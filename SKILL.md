@@ -58,6 +58,8 @@ Before running Terminus, confirm:
 
 Ask only for what cannot be inferred or discovered programmatically.
 
+On accounts that see many sites, an unfiltered `terminus site:list` can take 90+ seconds or time out. Use `org:site:list <org>` or `site:list --owner=me` instead, or `site:info <site>` when the site is already known.
+
 ## Authentication
 
 ```bash
