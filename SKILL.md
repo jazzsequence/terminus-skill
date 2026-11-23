@@ -11,10 +11,10 @@ Terminus is Pantheon's official CLI. It wraps the Terminus API (`terminus.panthe
 ## Ground rules
 
 1. **Only use commands that exist.** Never invent command names, options, subcommands, or flags. The complete command reference is in `references/commands.md`. Plugin commands are in `references/plugins.md`. When unsure, use `terminus list` or `terminus help <command>` to verify before running anything.
-2. **Always confirm exact syntax with `terminus help` before running any command.** Run `terminus help <command>` to get the authoritative parameter list for that command before suggesting or executing it. Reference files may lag behind the installed version.
+2. **Always confirm exact syntax with `terminus help` before running any command.** Run `terminus help <command>` to get the authoritative parameter list for that command before suggesting or executing it. Reference files may lag behind the installed version. But `terminus help` and `terminus list` don't mark deprecated commands (the warning only prints when the command runs), so before suggesting a command also check its row in `references/commands.md`.
 3. **Prefer Terminus CLI over direct API calls.** Terminus wraps the Terminus API (`terminus.pantheon.io`). Only call the API directly when no Terminus command or plugin covers the need. See `references/api.md`.
 4. **Confirm site and environment before destructive operations.** See `references/safety.md` before running anything that modifies or deletes data.
-5. **Verify authentication before every session.** Run `terminus auth:whoami` to confirm an active session. If unauthenticated, prompt for a machine token.
+5. **Verify authentication before every session.** Run `terminus auth:whoami` to confirm an active session. Re-run it after any long pause, before the next command. If unauthenticated, check `~/.terminus/cache/tokens/` for a saved token first (`terminus auth:login --email=<email>` reuses it with no prompt). Only ask for a machine token if none is saved for that email.
 
 ## Command syntax
 
@@ -53,7 +53,7 @@ Before running Terminus, confirm:
 |---|---|
 | Site name/UUID | `terminus site:list` or ask the user |
 | Environment | `terminus env:list <site>` — valid values: `dev`, `test`, `live`, or a multidev name |
-| Authentication | `terminus auth:whoami` — if unauthenticated, prompt for a machine token |
+| Authentication | `terminus auth:whoami` — if unauthenticated, check `~/.terminus/cache/tokens/` for a saved token for that email; only prompt for a machine token if none exists |
 | Installed plugins | `terminus self:plugin:list` — needed if the user references a plugin command |
 
 Ask only for what cannot be inferred or discovered programmatically.
@@ -62,13 +62,13 @@ Ask only for what cannot be inferred or discovered programmatically.
 
 ```bash
 terminus auth:login --machine-token=<token>      # authenticate with a machine token
-terminus auth:login --email=<email>              # interactive login (prompts for token)
+terminus auth:login --email=<email>              # reuses the machine token saved for <email> in ~/.terminus/cache/tokens/; no prompt
 terminus auth:whoami                             # verify current session + display user
 terminus auth:logout                             # clear session
 terminus machine-token:list                      # list stored machine tokens
 ```
 
-**Session duration:** 24 hours of inactivity; forced re-login after 30 days.
+**Session duration:** nominally 24 hours of inactivity; forced re-login after 30 days. Sessions have been observed to expire sooner (`You are not logged in` after ~10.5 idle hours), so re-run `terminus auth:whoami` after any long pause before the next command.
 
 **For CI/CD:** set `TERMINUS_TOKEN` in the environment, then:
 ```bash
