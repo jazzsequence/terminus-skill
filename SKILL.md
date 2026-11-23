@@ -112,6 +112,17 @@ The `--` separator is required — without it, flags are parsed by Terminus inst
 | Drupal | Dev has code but no install. Run `terminus remote:drush <site>.dev -- site-install -y`; `remote:drush <site>.dev -- user-login` gives a one-time login link. |
 | Next.js | No install step. The code lives in an external repo (`--vcs-provider=github`), and the creation workflow triggers the first build. `terminus node:builds:wait <site>.dev` can fail with "This command only works for sites using external VCS" until that workflow finishes. That's expected, so keep polling rather than recreating the site. |
 
+### Looking up site and environment details
+
+Some values are per environment rather than per site, so asking `site:info` for them fails with `The requested field, '<name>', is not defined.`
+
+| Value | Command |
+|---|---|
+| PHP version | `terminus env:list <site> --fields=id,php_version` (all environments) or `terminus env:info <site>.<env> --field=php_version` |
+| Object cache (Redis) state | `terminus site:info <site> --field=has_object_cache` |
+| Search (Solr/Elasticsearch) state | `terminus site:info <site> --field=search` |
+| Organization, plan | `terminus site:info <site> --fields=organization,plan_name` (`site:list` has no `organization` field) |
+
 ## Plugins
 
 Plugin commands are only available after installation. Always verify a plugin is installed with `terminus self:plugin:list` before suggesting its commands.
