@@ -11,10 +11,10 @@ Terminus is Pantheon's official CLI. It wraps the Terminus API (`terminus.panthe
 ## Ground rules
 
 1. **Only use commands that exist.** Never invent command names, options, subcommands, or flags. The complete command reference is in `references/commands.md`. Plugin commands are in `references/plugins.md`. When unsure, use `terminus list` or `terminus help <command>` to verify before running anything.
-2. **Always confirm exact syntax with `terminus help` before running any command.** Run `terminus help <command>` to get the authoritative parameter list for that command before suggesting or executing it. Reference files may lag behind the installed version.
+2. **Always confirm exact syntax with `terminus help` before running any command.** Run `terminus help <command>` to get the authoritative parameter list for that command before suggesting or executing it. Reference files may lag behind the installed version. But `terminus help` and `terminus list` don't mark deprecated commands (the warning only prints when the command runs), so before suggesting a command also check its row in `references/commands.md`.
 3. **Prefer Terminus CLI over direct API calls.** Terminus wraps the Terminus API (`terminus.pantheon.io`). Only call the API directly when no Terminus command or plugin covers the need. See `references/api.md`.
 4. **Confirm site and environment before destructive operations.** See `references/safety.md` before running anything that modifies or deletes data.
-5. **Verify authentication before every session.** Run `terminus auth:whoami` to confirm an active session. If unauthenticated, prompt for a machine token.
+5. **Verify authentication before every session.** Run `terminus auth:whoami` to confirm an active session. Re-run it after any long pause, before the next command. If unauthenticated, check `~/.terminus/cache/tokens/` for a saved token first (`terminus auth:login --email=<email>` reuses it with no prompt). Only ask for a machine token if none is saved for that email.
 
 ## Command syntax
 
@@ -53,22 +53,24 @@ Before running Terminus, confirm:
 |---|---|
 | Site name/UUID | `terminus site:list` or ask the user |
 | Environment | `terminus env:list <site>` — valid values: `dev`, `test`, `live`, or a multidev name |
-| Authentication | `terminus auth:whoami` — if unauthenticated, prompt for a machine token |
+| Authentication | `terminus auth:whoami` — if unauthenticated, check `~/.terminus/cache/tokens/` for a saved token for that email; only prompt for a machine token if none exists |
 | Installed plugins | `terminus self:plugin:list` — needed if the user references a plugin command |
 
 Ask only for what cannot be inferred or discovered programmatically.
+
+On accounts that see many sites, an unfiltered `terminus site:list` can take 90+ seconds or time out. Use `org:site:list <org>` or `site:list --owner=me` instead, or `site:info <site>` when the site is already known.
 
 ## Authentication
 
 ```bash
 terminus auth:login --machine-token=<token>      # authenticate with a machine token
-terminus auth:login --email=<email>              # interactive login (prompts for token)
+terminus auth:login --email=<email>              # reuses the machine token saved for <email> in ~/.terminus/cache/tokens/; no prompt
 terminus auth:whoami                             # verify current session + display user
 terminus auth:logout                             # clear session
 terminus machine-token:list                      # list stored machine tokens
 ```
 
-**Session duration:** 24 hours of inactivity; forced re-login after 30 days.
+**Session duration:** nominally 24 hours of inactivity; forced re-login after 30 days. Sessions have been observed to expire sooner (`You are not logged in` after ~10.5 idle hours), so re-run `terminus auth:whoami` after any long pause before the next command.
 
 **For CI/CD:** set `TERMINUS_TOKEN` in the environment, then:
 ```bash
@@ -101,6 +103,34 @@ terminus remote:drush <site>.<env> -- <drush-args>
 ```
 
 The `--` separator is required — without it, flags are parsed by Terminus instead of WP-CLI/Drush. See `references/commands.md` under `remote` for full options.
+
+### Creating a site
+
+`terminus site:create` is slow. WordPress sites have taken 2m40s–4m+, so allow a timeout over 5 minutes. A new site isn't usable right away, and what's left to do depends on the framework:
+
+| Site type | After `site:create` |
+|---|---|
+| WordPress | Dev has code but no install. Run `terminus remote:wp <site>.dev -- core install ...` before anything else works. |
+| Drupal | Dev has code but no install. Run `terminus remote:drush <site>.dev -- site-install -y`; `remote:drush <site>.dev -- user-login` gives a one-time login link. |
+| Next.js | No install step. The code lives in an external repo (`--vcs-provider=github`), and the creation workflow triggers the first build automatically. **That build can fail if the app needs secrets that aren't set yet** — see below. |
+
+**Next.js builds and secrets.** Whether the first build succeeds depends on the app. If it reads environment variables during the build, those must exist before the build runs, or it ends in `BUILD_FAILURE`. For example, a Content Publisher starter needs `PCC_SITE_ID` and `PCC_TOKEN`, and a headless CMS frontend typically needs the CMS URL. Check the app's `.env.example`, README, or the Pantheon docs for what it expects.
+
+- Set them as `--type=env --scope=web` secrets: `terminus secret:site:set <site> <name> <value> --type=env --scope=web`. Other type/scope combinations aren't exposed as `process.env.*` during the build, and type and scope can't be changed after creation (delete and re-create the secret).
+- Set them as soon as the site exists, before the first build runs. The dev environment isn't ready the moment `site:info` starts answering, so retry `secret:site:set` until it succeeds. Running `site:create` as a background task makes this possible. The Pantheon Dashboard can also take secrets at site creation time.
+- New or changed secrets only take effect on the next build. If the first build already failed or ran without them, set the secrets and run `terminus node:builds:rebuild <site>.dev`.
+- `terminus node:builds:wait <site>.dev` can fail with "This command only works for sites using external VCS" until the creation workflow finishes. That's expected, so keep polling. If the build status becomes `BUILD_FAILURE`, stop polling and list builds with `terminus node:builds:list <site>.dev` and read the failing one with `terminus node:logs:build:get <site>.<env> <build-id>` (works on dev and multidev environments too). Don't recreate the site.
+
+### Looking up site and environment details
+
+Some values are per environment rather than per site, so asking `site:info` for them fails with `The requested field, '<name>', is not defined.`
+
+| Value | Command |
+|---|---|
+| PHP version | `terminus env:list <site> --fields=id,php_version` (all environments) or `terminus env:info <site>.<env> --field=php_version` |
+| Object cache (Redis) state | `terminus site:info <site> --field=has_object_cache` |
+| Search (Solr/Elasticsearch) state | `terminus site:info <site> --field=search` |
+| Organization, plan | `terminus site:info <site> --fields=organization,plan_name` (`site:list` has no `organization` field) |
 
 ## Plugins
 

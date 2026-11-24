@@ -8,6 +8,21 @@
 - Use `-n` / `--no-interaction` to suppress all interactive prompts
 - Use `--quiet` to suppress all non-error output
 
+## Don't filter output when checking success
+
+Don't pipe through `head`, `tail`, or `grep -v` when checking that a command exists or succeeded. Symfony's error box starts with blank padding lines, so `terminus redis:info 2>&1 | grep -v notice | head -2` prints two blank lines and the pipeline exits 0 — the failure is hidden. Check `$?` (or `set -o pipefail`) or keep the output unfiltered.
+
+```bash
+# Bad: exit status is head's, and the error text is cut off
+terminus some:command 2>&1 | grep -v notice | head -2
+
+# Good: capture, check the status, then filter for display
+if ! OUTPUT=$(terminus some:command 2>&1); then
+  echo "$OUTPUT" >&2
+  exit 1
+fi
+```
+
 ## Extracting single values
 
 ```bash

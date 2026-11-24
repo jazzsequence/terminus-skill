@@ -175,6 +175,7 @@ terminus self:plugin:install pantheon-systems/terminus-gcdn-plugin
 | `gcdn:upgrade <site>` | Upgrade a site to Global CDN |
 | `gcdn:dns <site>.live` | Show DNS records required for custom domains |
 | `gcdn:verify <site>.live <domain>` | Verify that a domain is correctly pointed to GCDN |
+| `gcdn:bot-bypass <site>` | Show the current and next bot-bypass tokens. `--format=json --fields=role,token,valid_from,expires_at,header_name`. The tokens are secrets — don't paste them into logs, commits, or chat |
 
 ---
 

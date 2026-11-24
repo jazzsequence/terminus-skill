@@ -233,6 +233,8 @@ Use `terminus help <command>` for full options on any command. Use `terminus lis
 | `redis:enable <site>` | Enable Redis add-on |
 | `redis:disable <site>` | Disable Redis add-on |
 
+There is no `redis:info`. Check object cache state with `site:info <site> --field=has_object_cache`.
+
 ---
 
 ## remote
@@ -250,7 +252,7 @@ The `--` separator is required. SSH key must be configured on the account.
 
 | Command | Description |
 |---|---|
-| `search:enable <site>` | Enable search indexing. `--flavor=solr\|elasticsearch` |
+| `search:enable <site>` | Enable search indexing. `--flavor=solr\|elasticsearch`. Defaults to `elasticsearch` on WordPress and `solr` on Drupal, so pass `--flavor=solr` for Solr on WordPress. Check status with `site:info <site> --field=search` (`Disabled`, `Solr`) |
 | `search:disable <site>` | Disable search indexing. `--flavor=solr\|elasticsearch` |
 
 ---
@@ -293,9 +295,9 @@ The `--` separator is required. SSH key must be configured on the account.
 |---|---|
 | `site:create <name> <label> <upstream-id>` | Create a new site. `--org=<org>`, `--region=us\|eu\|au\|ca`, `--vcs-provider=<provider>`, `--vcs-org=<org>`, `--visibility=public\|private`, `--create-repo`, `--repository-name=<name>`, `--skip-clone-repo` |
 | `site:delete <site>` | **DESTRUCTIVE** — Permanently delete a site from Pantheon |
-| `site:info <site>` | Display site information |
+| `site:info <site>` | Display site information. Fields: `id`, `name`, `label`, `created`, `framework`, `region`, `organization`, `plan_name`, `max_num_cdes`, `upstream`, `upstream_label`, `holder_type`, `holder_id`, `owner`, `frozen`, `last_frozen_at`, `has_object_cache`, `search`. |
 | `site:label:set <site> <label>` | Change the site label |
-| `site:list` | List all accessible sites. `--name=<filter>`, `--org=<org>`, `--owner=<owner>`, `--plan=<plan>`, `--team`, `--upstream=<upstream-id>` |
+| `site:list` | List all accessible sites. `--owner=<owner>` (`me` or user UUID), `--team`, `--upstream=<upstream-id>`. `--name`, `--org` and `--plan` are **deprecated**. Fields: `name`, `label`, `id`, `plan_name`, `framework`, `region`, `owner`, `created`, `memberships`, `frozen`, `last_frozen_at`, `upstream`, `upstream_label` (no `organization`) |
 | `site:lookup <site>` | Get the UUID for a site by name |
 | `site:org:add <site> <org>` | Add the site to an organization |
 | `site:org:list <site>` | List organizations the site belongs to |
@@ -313,7 +315,7 @@ The `--` separator is required. SSH key must be configured on the account.
 
 ## solr (deprecated)
 
-These commands are deprecated in favor of `search:enable/disable --flavor=solr`.
+These commands are deprecated in favor of `search:enable/disable --flavor=solr`. In 4.3.x they still work but print a deprecation warning at run time; `terminus help solr:enable` doesn't mention it.
 
 | Command | Description |
 |---|---|

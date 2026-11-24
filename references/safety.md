@@ -25,7 +25,7 @@ Use this file before running any command that modifies, deletes, or overwrites d
 
 1. Confirm the exact `<site>.<env>` target with the user.
 2. Check if the environment has a recent backup: `terminus backup:list <site>.<env>`
-3. If no recent backup, offer to create one: `terminus backup:create <site>.<env>`
+3. If no recent backup, offer to create one: `terminus backup:create <site>.<env>`, then confirm with `terminus backup:list <site>.<env>` that code, database and files are all listed with a non-zero size.
 4. Present what will happen and ask for confirmation before proceeding.
 
 ## Connection mode safety
