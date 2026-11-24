@@ -36,11 +36,9 @@ Start a new session (or run `/reload-plugins`) and the skill is available as `te
 
 ### Upgrading from the installer-based setup
 
-Versions before 1.1.0 were installed by `install.sh`, which copied the skill to `~/.claude/skills/terminus/`. Remove that copy so you don't end up with two versions of the skill, then install as above. The skill also checks for the old copy when it loads and offers to remove it for you:
+Versions before 1.1.0 were installed by `install.sh` into `~/.claude/skills/terminus/`. Install the plugin as above. The first time the skill loads, it detects the old copy and offers to remove it, so you don't end up with two versions.
 
-```bash
-rm -rf ~/.claude/skills/terminus
-```
+If it doesn't (for example if Claude picks the old copy instead of the plugin), remove it yourself: `rm -rf ~/.claude/skills/terminus`.
 
 ## Updating
 
