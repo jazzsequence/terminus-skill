@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 - 2026-11-24
+
+### Changed
+- Installation is now marketplace-only (`claude plugin marketplace add` + `claude plugin install`). The skill moved to `skills/terminus/` so the plugin system loads it, and the marketplace entry uses `"source": "./"`
+- Existing installs made with `install.sh` must remove `~/.claude/skills/terminus/` (see README)
+
+### Removed
+- `install.sh` and its git-clone based install and update path
+
 ## 1.0.1 - 2026-11-24
 
 ### Added
