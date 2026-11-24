@@ -23,33 +23,30 @@ Terminus 3.x is also supported with minor differences.
 
 ## Installation
 
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/jazzsequence/terminus-skill/main/install.sh)
-```
-
-The installer copies the skill to `~/.claude/skills/terminus/` and automatically adds this repo as a marketplace to `~/.claude/settings.json`, enabling auto-updates.
-
-Or from a local clone:
+Install from the marketplace in this repo:
 
 ```bash
-git clone https://github.com/jazzsequence/terminus-skill
-cd terminus-skill
-./install.sh
+claude plugin marketplace add jazzsequence/terminus-skill
+claude plugin install terminus-skill@terminus-skill
 ```
 
-The skill will be available as `terminus` in Claude Code.
+Or, inside Claude Code: `/plugin marketplace add jazzsequence/terminus-skill`, then `/plugin install terminus-skill@terminus-skill`.
 
-### Options
+Start a new session (or run `/reload-plugins`) and the skill is available as `terminus`.
 
-```bash
-./install.sh --symlink         # symlink instead of copy (updates with git pull)
-./install.sh --no-marketplace  # skip settings.json marketplace configuration
-./install.sh --uninstall       # remove the skill
-```
+### Upgrading from the installer-based setup
+
+Versions before 1.1.0 were installed by `install.sh` into `~/.claude/skills/terminus/`. Install the plugin as above. The first time the skill loads, it detects the old copy and offers to remove it, so you don't end up with two versions.
+
+If it doesn't (for example if Claude picks the old copy instead of the plugin), remove it yourself: `rm -rf ~/.claude/skills/terminus`.
 
 ## Updating
 
-Once installed, enable automatic updates in Claude Code:
+```bash
+claude plugin update terminus-skill@terminus-skill
+```
+
+To have Claude Code update it automatically, enable auto-update for the marketplace:
 
 ```
 /plugin
@@ -58,16 +55,10 @@ Once installed, enable automatic updates in Claude Code:
 [RETURN] → → Enable auto-update
 ```
 
-To update manually:
-
-```
-/plugin marketplace update terminus-skill
-```
-
 ## Uninstalling
 
 ```bash
-./install.sh --uninstall
+claude plugin uninstall terminus-skill@terminus-skill
 ```
 
 ## Usage
@@ -83,14 +74,15 @@ Or reference it in a prompt — Claude Code will automatically activate it when 
 ## Skill structure
 
 ```
-SKILL.md                  Main skill file (loaded when invoked)
-references/
-  commands.md             Complete command reference — all 170+ core commands
-  plugins.md              Official and community plugin directory with commands
-  env-vars.md             Environment variables and config.yml reference
-  scripting.md            Bash scripting patterns and CI/CD examples
-  safety.md               Destructive command checklist
-  api.md                  Terminus API direct access (rare use cases)
+skills/terminus/
+  SKILL.md                  Main skill file (loaded when invoked)
+  references/
+    commands.md             Complete command reference — all 170+ core commands
+    plugins.md              Official and community plugin directory with commands
+    env-vars.md             Environment variables and config.yml reference
+    scripting.md            Bash scripting patterns and CI/CD examples
+    safety.md               Destructive command checklist
+    api.md                  Terminus API direct access (rare use cases)
 ```
 
 ## Covered plugins
@@ -140,7 +132,7 @@ See the [terminus-plugin-project org](https://github.com/terminus-plugin-project
 
 ### Archived
 
-Do not install. See [`references/plugins.md`](references/plugins.md) for what each plugin did and what replaced it.
+Do not install. See [`references/plugins.md`](skills/terminus/references/plugins.md) for what each plugin did and what replaced it.
 
 | Plugin | Last active | Notes |
 |---|---|---|

@@ -30,8 +30,8 @@ This skill was created from the following sources of truth (all consulted during
 
 When updating this skill, check:
 
-1. **New Terminus commands**: run `terminus list` against a fresh install or diff `src/Commands/` in the terminus repo — update `references/commands.md`
-2. **New plugins**: check https://docs.pantheon.io/terminus/directory and the `pantheon-systems` GitHub org — update `references/plugins.md`
+1. **New Terminus commands**: run `terminus list` against a fresh install or diff `src/Commands/` in the terminus repo — update `skills/terminus/references/commands.md`
+2. **New plugins**: check https://docs.pantheon.io/terminus/directory and the `pantheon-systems` GitHub org — update `skills/terminus/references/plugins.md`
 3. **Deprecated commands**: watch for `@deprecated` annotations in terminus source — mark in the command reference
 4. **Plugin commands rolled into core**: when a plugin repo gets archived, move its commands into the core section and note they no longer need separate installation
 
@@ -39,13 +39,13 @@ When updating this skill, check:
 
 | File | Purpose |
 |---|---|
-| `SKILL.md` | Main skill — loaded when invoked. Workflows, syntax, common patterns. |
-| `references/commands.md` | Full command reference, all namespaces |
-| `references/plugins.md` | All known plugins with commands and install instructions |
-| `references/env-vars.md` | Environment variables and `~/.terminus/config.yml` |
-| `references/scripting.md` | Bash patterns and CI/CD examples |
-| `references/safety.md` | Destructive command guardrails |
-| `references/api.md` | Terminus API direct access (rare) |
+| `skills/terminus/SKILL.md` | Main skill — loaded when invoked. Workflows, syntax, common patterns. |
+| `skills/terminus/references/commands.md` | Full command reference, all namespaces |
+| `skills/terminus/references/plugins.md` | All known plugins with commands and install instructions |
+| `skills/terminus/references/env-vars.md` | Environment variables and `~/.terminus/config.yml` |
+| `skills/terminus/references/scripting.md` | Bash patterns and CI/CD examples |
+| `skills/terminus/references/safety.md` | Destructive command guardrails |
+| `skills/terminus/references/api.md` | Terminus API direct access (rare) |
 
 ## Commands to verify the skill
 
@@ -69,9 +69,9 @@ terminus <command> -vvv 2>&1 | grep terminus.pantheon.io
 
 Use semantic versioning: `patch` for corrections and small additions to the guidance or references, `minor` for new workflows or sections, `major` for breaking changes.
 
-## Installation path
+## Installation
 
-Users install by copying this directory to `~/.claude/skills/terminus/`. The skill is invoked as `terminus` in Claude Code.
+This repo is both a plugin and its own marketplace (`.claude-plugin/marketplace.json` with `"source": "./"`). Users install with `claude plugin marketplace add jazzsequence/terminus-skill` and `claude plugin install terminus-skill@terminus-skill`; there is no installer script and nothing in the install or update path uses git directly. The skill must live at `skills/terminus/SKILL.md` — a `SKILL.md` at the repo root is not picked up by the plugin system. Run `claude plugin validate .` after structural changes.
 
 ## Do not add to pantheon-skills
 

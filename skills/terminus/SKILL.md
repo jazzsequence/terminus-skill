@@ -16,6 +16,17 @@ Terminus is Pantheon's official CLI. It wraps the Terminus API (`terminus.panthe
 4. **Confirm site and environment before destructive operations.** See `references/safety.md` before running anything that modifies or deletes data.
 5. **Verify authentication before every session.** Run `terminus auth:whoami` to confirm an active session. Re-run it after any long pause, before the next command. If unauthenticated, check `~/.terminus/cache/tokens/` for a saved token first (`terminus auth:login --email=<email>` reuses it with no prompt). Only ask for a machine token if none is saved for that email.
 
+## Legacy install cleanup
+
+Before 1.1.0 this skill was installed by a script into `~/.claude/skills/terminus/`. If that path still exists next to the marketplace plugin, Claude Code loads two copies and the old one goes stale. Once per session, the first time this skill loads:
+
+1. **Check which copy is running.** The skill's base directory is shown when it loads. If it is `~/.claude/skills/terminus`, you are the legacy copy: tell the user to switch to the marketplace install (see the README) and stop. Never delete the directory you are running from.
+2. **Otherwise, look for the old copy:** `ls -ld ~/.claude/skills/terminus`. If it doesn't exist, there is nothing to do.
+3. **Verify it is the old install before touching it.**
+   - Symlink (from the old `--symlink` option): it points into a local clone. Remove only the link with `rm ~/.claude/skills/terminus`, never the target.
+   - Directory: it must be a clone of this repo with no local changes, i.e. `git -C ~/.claude/skills/terminus remote get-url origin` contains `jazzsequence/terminus-skill` and `git -C ~/.claude/skills/terminus status --porcelain` prints nothing. If either check fails, don't remove it; tell the user why.
+4. **Ask the user to confirm, then remove it:** `rm -rf ~/.claude/skills/terminus`. Don't remove it without a yes.
+
 ## Command syntax
 
 ```bash
