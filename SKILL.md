@@ -112,7 +112,14 @@ The `--` separator is required — without it, flags are parsed by Terminus inst
 |---|---|
 | WordPress | Dev has code but no install. Run `terminus remote:wp <site>.dev -- core install ...` before anything else works. |
 | Drupal | Dev has code but no install. Run `terminus remote:drush <site>.dev -- site-install -y`; `remote:drush <site>.dev -- user-login` gives a one-time login link. |
-| Next.js | No install step. The code lives in an external repo (`--vcs-provider=github`), and the creation workflow triggers the first build. `terminus node:builds:wait <site>.dev` can fail with "This command only works for sites using external VCS" until that workflow finishes. That's expected, so keep polling rather than recreating the site. |
+| Next.js | No install step. The code lives in an external repo (`--vcs-provider=github`), and the creation workflow triggers the first build automatically. **That build can fail if the app needs secrets that aren't set yet** — see below. |
+
+**Next.js builds and secrets.** Whether the first build succeeds depends on the app. If it reads environment variables during the build, those must exist before the build runs, or it ends in `BUILD_FAILURE`. For example, a Content Publisher starter needs `PCC_SITE_ID` and `PCC_TOKEN`, and a headless CMS frontend typically needs the CMS URL. Check the app's `.env.example`, README, or the Pantheon docs for what it expects.
+
+- Set them as `--type=env --scope=web` secrets: `terminus secret:site:set <site> <name> <value> --type=env --scope=web`. Other type/scope combinations aren't exposed as `process.env.*` during the build, and type and scope can't be changed after creation (delete and re-create the secret).
+- Set them as soon as the site exists, before the first build runs. The dev environment isn't ready the moment `site:info` starts answering, so retry `secret:site:set` until it succeeds. Running `site:create` as a background task makes this possible. The Pantheon Dashboard can also take secrets at site creation time.
+- New or changed secrets only take effect on the next build. If the first build already failed or ran without them, set the secrets and run `terminus node:builds:rebuild <site>.dev`.
+- `terminus node:builds:wait <site>.dev` can fail with "This command only works for sites using external VCS" until the creation workflow finishes. That's expected, so keep polling. If the build status becomes `BUILD_FAILURE`, stop polling and list builds with `terminus node:builds:list <site>.dev` and read the failing one with `terminus node:logs:build:get <site>.<env> <build-id>` (its help text says Test or Live only, so if it rejects `dev`, use the build log in the Dashboard). Don't recreate the site.
 
 ### Looking up site and environment details
 
