@@ -11,7 +11,7 @@
         "repo": "jazzsequence/terminus-skill"
       },
       "description": "Claude Code skill for Terminus, Pantheon's official CLI. Provides command reference, plugin management, scripting patterns, and CI/CD workflows.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "Chris Reynolds"
       },

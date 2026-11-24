@@ -1,7 +1,7 @@
 {
   "name": "terminus-skill",
   "description": "Claude Code skill for Terminus, Pantheon's official CLI",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Chris Reynolds"
   }

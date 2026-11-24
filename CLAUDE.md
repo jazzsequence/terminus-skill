@@ -63,6 +63,12 @@ terminus list | grep <plugin-namespace>
 terminus <command> -vvv 2>&1 | grep terminus.pantheon.io
 ```
 
+## Versioning
+
+**Bump the version in both `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` whenever skill content changes**, and add a `CHANGELOG.md` entry. The plugin system compares version numbers to decide whether an update is available — if the version never changes, `claude plugin update` reports "already at the latest version" even when `SKILL.md` or the references changed.
+
+Use semantic versioning: `patch` for corrections and small additions to the guidance or references, `minor` for new workflows or sections, `major` for breaking changes.
+
 ## Installation path
 
 Users install by copying this directory to `~/.claude/skills/terminus/`. The skill is invoked as `terminus` in Claude Code.
